@@ -634,26 +634,22 @@ texts = ['A Message From Taylor',
 texts = [text.upper().replace(' ', '') for text in texts] # make texts upper case and remove spaces
 
 # Read letter counts from xlsx file.
-letter_counts = pd.read_excel('letter_counts2.xlsx', header=None)
+letter_counts = pd.read_excel('letter_counts3.xlsx', header=None)
 
 letter_counts_dict = dict(zip(letter_counts[0], letter_counts[1])) # form dictionary
 total_letter_count = sum(letter_counts_dict.values())
 
-memory = {} # dictionary to store the results of recursive function calls
+counter = 0
 
 # Recursive function to choose texts so that the total letter count is minimized. 
 # Returns a tuple of the lowest letter count possible and the list of texts chosen.
 def choose_text(current_text_idx: int, letters_left_total: int, letters_left_base: Dict[str, int]) -> Tuple[int, List[str]]:
-  mem_key = (current_text_idx, tuple(letters_left_base.items()))
-  # Check if the result is already in memory
-  if mem_key in memory:
-    return memory[mem_key]
-
+  global counter
   if letters_left_total == 0:
-    memory[mem_key] = 0, []
+    counter += 1
     return 0, [] # we used all the letters, early return
   if current_text_idx >= len(texts):
-    memory[mem_key] = letters_left_total, []
+    counter += 1
     return letters_left_total, [] # out of texts to try
   
   # Try this text.
@@ -674,30 +670,32 @@ def choose_text(current_text_idx: int, letters_left_total: int, letters_left_bas
    
   excluded = choose_text(current_text_idx + 1, letters_left_total, letters_left_base) # recursive call without this text
   if suitable_letter_count < len(text): # cannot form current text
-    memory[mem_key] = excluded
+    counter += 1
     return excluded
   # can form current text
   # search for the best texts to form with the remaining letters
   lowest_letter_count, best_texts = \
-    choose_text(current_text_idx + 1, letters_left_total - len(text), letters_left.copy()) # recursive call
+    choose_text(current_text_idx + 1, letters_left_total - len(text), letters_left) # recursive call
     
   best_texts.append(text)
   included = (lowest_letter_count, best_texts)
 
   if included[0] < excluded[0]: # choose the one with the lowest letter count
-    memory[mem_key] = included
+    counter += 1
     return included
   else:
-    memory[mem_key] = excluded
+    counter += 1
     return excluded
 # function ends
 
-lowest_letter_count_possible, best_texts = choose_text(0, total_letter_count, letter_counts_dict.copy()) # call recursive function
+lowest_letter_count_possible, best_texts = choose_text(0, total_letter_count, letter_counts_dict) # call recursive function
 
 print(f"You started with {total_letter_count} letters.")
 print(f"You can decrease the letter count to {lowest_letter_count_possible} by choosing the following texts:")
 for text in best_texts:
   print(text)
+print("\n")
+print(f"Recursive function returned {counter} times.")
   
 
 
