@@ -664,17 +664,15 @@ def choose_text(current_text_idx: int, letters_left_total: int, letters_left_bas
       break # break loop if we do not have enough letters
    
   excluded = choose_text(current_text_idx + 1, letters_left_total, letters_left_base) # recursive call without this text
-  if suitable_letter_count < len(text): # cannot make text
-    # return unused letters
-    # for i in range(suitable_letter_count):
-    #  letter_to_return = text[i]
-    #  letters_left[letter_to_return] += 1
+  if suitable_letter_count < len(text): # cannot form current text
     return excluded
-  # can make text
-  sub_lowest_count, sub_chosen_texts = \
+  # can form current text
+  # search for the best texts to form with the remaining letters
+  lowest_letter_count, best_texts = \
     choose_text(current_text_idx + 1, letters_left_total - len(text), letters_left.copy()) # recursive call
     
-  included = (sub_lowest_count, [text] + sub_chosen_texts) # including this text decreases the letter count and includes this text
+  best_texts.append(text)
+  included = (lowest_letter_count, best_texts)
 
   if included[0] < excluded[0]: # choose the one with the lowest letter count
     return included
