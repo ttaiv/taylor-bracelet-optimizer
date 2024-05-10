@@ -31,7 +31,7 @@ texts = ['A Message From Taylor',
 
 'Angelina',
 
-'Anti-Hero',
+'Anti Hero',
 
 'august',
 
@@ -641,14 +641,16 @@ total_letter_count = sum(letter_counts_dict.values())
 
 # Recursive function to choose texts so that the total letter count is minimized. 
 # Returns a tuple of the lowest letter count possible and the list of texts chosen.
-def choose_text(current_text_idx: int, letters_left_total: int, letters_left: Dict[str, int]) -> Tuple[int, List[str]]:
-  #if letters_left_total == 0:
-    #return 0, [] # we used all the letters
+def choose_text(current_text_idx: int, letters_left_total: int, letters_left_base: Dict[str, int]) -> Tuple[int, List[str]]:
+  if letters_left_total == 0:
+    return 0, [] # we used all the letters, early return
   if current_text_idx >= len(texts):
     return letters_left_total, [] # out of texts to try
   
   # Try this text.
   text = texts[current_text_idx]
+  letters_left = letters_left_base.copy() # this can be modified
+
   # Check if we have enough letters to form this text.
   suitable_letter_count = 0
   for letter in text:
@@ -661,18 +663,18 @@ def choose_text(current_text_idx: int, letters_left_total: int, letters_left: Di
     else:
       break # break loop if we do not have enough letters
    
-  # included is defined inside the if
+  excluded = choose_text(current_text_idx + 1, letters_left_total, letters_left_base) # recursive call without this text
   if suitable_letter_count < len(text): # cannot make text
     # return unused letters
-    for i in range(suitable_letter_count):
-      letter_to_return = text[i]
-      letters_left[letter_to_return] += 1
-    included = (letters_left_total, []) # 'including' this text does not decrease the letter count nor includes any texts
-  else: # can make text
-    sub_lowest_count, sub_chosen_texts = choose_text(current_text_idx + 1, letters_left_total - len(text), letters_left.copy())
-    included = (sub_lowest_count - len(text), [text] + sub_chosen_texts) # including this text decreases the letter count and includes this text
-
-  excluded = choose_text(current_text_idx + 1, letters_left_total, letters_left.copy())
+    # for i in range(suitable_letter_count):
+    #  letter_to_return = text[i]
+    #  letters_left[letter_to_return] += 1
+    return excluded
+  # can make text
+  sub_lowest_count, sub_chosen_texts = \
+    choose_text(current_text_idx + 1, letters_left_total - len(text), letters_left.copy()) # recursive call
+    
+  included = (sub_lowest_count, [text] + sub_chosen_texts) # including this text decreases the letter count and includes this text
 
   if included[0] < excluded[0]: # choose the one with the lowest letter count
     return included
@@ -680,7 +682,7 @@ def choose_text(current_text_idx: int, letters_left_total: int, letters_left: Di
     return excluded
 # function ends
 
-lowest_letter_count_possible, best_texts = choose_text(0, total_letter_count, letter_counts_dict) # call recursive function
+lowest_letter_count_possible, best_texts = choose_text(0, total_letter_count, letter_counts_dict.copy()) # call recursive function
 
 print(f"You started with {total_letter_count} letters.")
 print(f"You can decrease the letter count to {lowest_letter_count_possible} by choosing the following texts:")
