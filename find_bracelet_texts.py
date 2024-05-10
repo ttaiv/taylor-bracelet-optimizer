@@ -1,6 +1,6 @@
 # Description: This script finds texts that you can form using the letters you have so that you use as many letters as possible.
 # Author: Teemu
-# Version: 0.1
+# Version: 0.2
 
 # Import pandas and numpy
 import numpy as np
