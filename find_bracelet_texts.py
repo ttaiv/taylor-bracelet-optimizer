@@ -223,7 +223,7 @@ texts = ['A Message From Taylor',
 
 'High Infidelity',
 
-'Highway Donâ€™t Care',
+# 'Highway Donâ€™t Care',
 
 'Hits Different',
 
@@ -265,7 +265,7 @@ texts = ['A Message From Taylor',
 
 'Im Every Woman',
 
-'Im Only Me When Iâ€™m With You',
+# 'Im Only Me When Iâ€™m With You',
 
 'Innocent',
 
@@ -645,10 +645,11 @@ counter = 0
 # Returns a tuple of the lowest letter count possible and the list of texts chosen.
 def choose_text(current_text_idx: int, letters_left_total: int, letters_left_base: Dict[str, int]) -> Tuple[int, List[str]]:
   global counter
+
   if letters_left_total == 0:
     counter += 1
     return 0, [] # we used all the letters, early return
-  if current_text_idx >= len(texts):
+  if current_text_idx <  0:
     counter += 1
     return letters_left_total, [] # out of texts to try
   
@@ -668,14 +669,14 @@ def choose_text(current_text_idx: int, letters_left_total: int, letters_left_bas
     else:
       break # break loop if we do not have enough letters
    
-  excluded = choose_text(current_text_idx + 1, letters_left_total, letters_left_base) # recursive call without this text
+  excluded = choose_text(current_text_idx - 1, letters_left_total, letters_left_base) # recursive call without this text
   if suitable_letter_count < len(text): # cannot form current text
     counter += 1
     return excluded
   # can form current text
   # search for the best texts to form with the remaining letters
   lowest_letter_count, best_texts = \
-    choose_text(current_text_idx + 1, letters_left_total - len(text), letters_left) # recursive call
+    choose_text(current_text_idx - 1, letters_left_total - len(text), letters_left) # recursive call
     
   best_texts.append(text)
   included = (lowest_letter_count, best_texts)
@@ -688,7 +689,7 @@ def choose_text(current_text_idx: int, letters_left_total: int, letters_left_bas
     return excluded
 # function ends
 
-lowest_letter_count_possible, best_texts = choose_text(0, total_letter_count, letter_counts_dict) # call recursive function
+lowest_letter_count_possible, best_texts = choose_text(len(texts) - 1, total_letter_count, letter_counts_dict) # call recursive function
 
 print(f"You started with {total_letter_count} letters.")
 print(f"You can decrease the letter count to {lowest_letter_count_possible} by choosing the following texts:")
