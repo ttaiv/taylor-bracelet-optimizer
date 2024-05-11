@@ -634,21 +634,20 @@ texts = ['A Message From Taylor',
 texts = [text.upper().replace(' ', '') for text in texts] # make texts upper case and remove spaces
 
 # Read letter counts from xlsx file.
-letter_counts = pd.read_excel('letter_counts3.xlsx', header=None)
+letter_counts = pd.read_excel('letter_counts_real.xlsx', header=None)
 
 letter_counts_dict = dict(zip(letter_counts[0], letter_counts[1])) # form dictionary
 total_letter_count = sum(letter_counts_dict.values())
 
 counter = 0
 
+max_letters_left = 10
+
 # Recursive function to choose texts so that the total letter count is minimized. 
 # Returns a tuple of the lowest letter count possible and the list of texts chosen.
 def choose_text(current_text_idx: int, letters_left_total: int, letters_left_base: Dict[str, int]) -> Tuple[int, List[str]]:
   global counter
 
-  if letters_left_total == 0:
-    counter += 1
-    return 0, [] # we used all the letters, early return
   if current_text_idx <  0:
     counter += 1
     return letters_left_total, [] # out of texts to try
@@ -669,24 +668,32 @@ def choose_text(current_text_idx: int, letters_left_total: int, letters_left_bas
     else:
       break # break loop if we do not have enough letters
    
-  excluded = choose_text(current_text_idx - 1, letters_left_total, letters_left_base) # recursive call without this text
   if suitable_letter_count < len(text): # cannot form current text
-    counter += 1
-    return excluded
-  # can form current text
-  # search for the best texts to form with the remaining letters
-  lowest_letter_count, best_texts = \
-    choose_text(current_text_idx - 1, letters_left_total - len(text), letters_left) # recursive call
+    included = (float('inf'), []) # exclude this text
+  else: # can form current text
+    # search for the best texts to form with the remaining letters
+    lowest_letter_count, best_texts = \
+      choose_text(current_text_idx - 1, letters_left_total - len(text), letters_left) # recursive call
     
-  best_texts.append(text)
-  included = (lowest_letter_count, best_texts)
+    best_texts.append(text)
+    included = (lowest_letter_count, best_texts)
 
-  if included[0] < excluded[0]: # choose the one with the lowest letter count
+  if included[0] <= max_letters_left:
     counter += 1
-    return included
+    return included # early return 
   else:
-    counter += 1
-    return excluded
+    excluded = choose_text(current_text_idx - 1, letters_left_total, letters_left_base) # recursive call
+
+    if excluded[0] <= max_letters_left:
+      counter += 1
+      return excluded # early return
+
+    if included[0] < excluded[0]: # choose the one with the lowest letter count
+      counter += 1
+      return included
+    else:
+      counter += 1
+      return excluded
 # function ends
 
 lowest_letter_count_possible, best_texts = choose_text(len(texts) - 1, total_letter_count, letter_counts_dict) # call recursive function
