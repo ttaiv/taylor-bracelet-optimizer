@@ -1,4 +1,4 @@
-texts = ['A Message From Taylor',
+taylor_texts = ['A Message From Taylor',
 
 'A Perfectly Good Heart',
 
