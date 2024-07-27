@@ -1,3 +1,5 @@
+"""Contains a list of possible bracelet texts."""
+
 taylor_texts = [
     "A Message From Taylor",
     "A Perfectly Good Heart",
