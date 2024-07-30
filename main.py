@@ -4,11 +4,13 @@ import pandas as pd
 from bracelet_texts import taylor_texts
 from find_bracelet_texts import find_best_texts
 
+LETTER_COUNTS_FILENAME: str = "letter_counts_test_small2.xlsx"
+
 # Make texts upper case and remove spaces
 texts: list[str] = [text.upper().replace(" ", "") for text in taylor_texts]
 
 # Read letter counts from xlsx file.
-letter_counts_df: pd.DataFrame = pd.read_excel("letter_counts_real.xlsx", header=None)
+letter_counts_df: pd.DataFrame = pd.read_excel(LETTER_COUNTS_FILENAME, header=None)
 letter_counts_dict: dict[str, int] = dict(zip(letter_counts_df[0], letter_counts_df[1]))
 total_letter_count: int = sum(letter_counts_dict.values())
 
