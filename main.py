@@ -1,3 +1,5 @@
+"""Main program for finding the best bracelet texts."""
+
 import pandas as pd
 from bracelet_texts import taylor_texts
 from find_bracelet_texts import find_best_texts
@@ -14,9 +16,9 @@ print(f"Number of possible bracelet texts: {len(texts)}")
 print("Starting letters")
 for letter, count in letter_counts_dict.items():
     print(f"{letter}: {count}")
-print("\n")
+print()
 print(f"Starting the algorithm with a pool of {total_letter_count} letters.")
-print("\n")
+print()
 
 lowest_letter_count, solution_texts = find_best_texts(letter_counts_dict, texts)
 
