@@ -94,6 +94,7 @@ def find_best_texts_recursive(
     """
 
     letter_counts_tuple = letter_dict_to_tuple(letter_counts)
+    memo = {}
 
     # Inner recursive function
     def choose_text(
@@ -107,8 +108,14 @@ def find_best_texts_recursive(
         Tries all possible combinations of texts by including or excluding each text.
         Is slow as heck for large inputs.
         """
+        mem_key = (current_text_idx, letters_left)
+        if mem_key in memo:
+            letters_left_mem, sol = memo[mem_key]
+            return (letters_left_mem, sol, recursive_calls)
+
         if current_text_idx < 0:
             # out of texts to try
+            memo[mem_key] = (letters_left_total, [])
             return (letters_left_total, [], recursive_calls)
 
         # Try this text.
@@ -116,12 +123,14 @@ def find_best_texts_recursive(
 
         if not can_form_string(current_text, letters_left):
             # exclude this text
-            return choose_text(
+            letters, sol, calls = choose_text(
                 current_text_idx - 1,
                 letters_left_total,
                 letters_left,
                 recursive_calls + 1,
             )
+            memo[mem_key] = (letters, sol)
+            return (letters, sol, calls)
 
         # Can form current text.
         # Search for the best texts to form with the remaining letters.
@@ -142,8 +151,10 @@ def find_best_texts_recursive(
         new_calls = recursive_calls + inc_sub_calls + excl_sub_calls
 
         if inc_letters_left < excl_letters_left:
+            memo[mem_key] = (inc_letters_left, incl_sub_sol + [current_text])
             return (inc_letters_left, incl_sub_sol + [current_text], new_calls)
 
+        memo[mem_key] = (excl_letters_left, excl_sol)
         return (excl_letters_left, excl_sol, new_calls)
 
     # Inner function ends
