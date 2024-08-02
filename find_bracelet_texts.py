@@ -58,7 +58,7 @@ def update_remaining_letters(chosen_string: str, letter_counts: dict[str, int]):
 
 def find_best_texts(
     letter_counts: dict[str, int], texts: list[str]
-) -> tuple[int, list[str]]:
+) -> tuple[int, list[str], int]:
     """
     Finds the best texts to form with the given letter counts.
     The best texts are the ones that minimize the total letter count.
@@ -69,8 +69,8 @@ def find_best_texts(
         texts (list[str]): A list of texts to choose from.
 
     Returns:
-        tuple[int, list[str]]: A tuple of the lowest letter count possible and the
-        list of texts chosen
+        tuple[int, list[str], int]: A tuple of the lowest letter count possible, the
+        list of texts chosen and the number of made recursive calls.
     """
 
     # Inner recursive function
@@ -78,7 +78,8 @@ def find_best_texts(
         current_text_idx: int,
         letters_left_total: int,
         letters_left_dict: dict[str, int],
-    ) -> tuple[int, list[str]]:
+        recursive_calls: int,
+    ) -> tuple[int, list[str], int]:
         """
         Recursive function to choose the best texts to form with the given letter counts.
         Tries all possible combinations of texts by including or excluding each text.
@@ -86,7 +87,7 @@ def find_best_texts(
         """
         if current_text_idx < 0:
             # out of texts to try
-            return letters_left_total, []
+            return (letters_left_total, [], recursive_calls)
 
         # Try this text.
         current_text: str = texts[current_text_idx]
@@ -94,27 +95,35 @@ def find_best_texts(
         if not can_form_string(current_text, letters_left_dict):
             # exclude this text
             return choose_text(
-                current_text_idx - 1, letters_left_total, letters_left_dict
+                current_text_idx - 1,
+                letters_left_total,
+                letters_left_dict,
+                recursive_calls + 1,
             )
 
         # Can form current text.
         # Search for the best texts to form with the remaining letters.
-        new_letters_left = update_remaining_letters(current_text, letters_left_dict)
-        sub_letters_left, sub_solution = choose_text(
+        new_letters_left: dict[str, int] = update_remaining_letters(
+            current_text, letters_left_dict
+        )
+        inc_letters_left, incl_sub_sol, inc_sub_calls = choose_text(
             current_text_idx - 1,
             letters_left_total - len(current_text),
             new_letters_left,
+            1,  # start a new counter for the recursive calls
         )
 
         # Compare the cases where this text is included or excluded.
-        included = (sub_letters_left, sub_solution + [current_text])
-        excluded = choose_text(
-            current_text_idx - 1, letters_left_total, letters_left_dict
+        excl_letters_left, excl_sol, excl_sub_calls = choose_text(
+            current_text_idx - 1, letters_left_total, letters_left_dict, 1
         )
-        if included[0] < excluded[0]:  # choose the one with the lowest letter count
-            return included
-        return excluded
+        new_calls = recursive_calls + inc_sub_calls + excl_sub_calls
+
+        if inc_letters_left < excl_letters_left:
+            return (inc_letters_left, incl_sub_sol + [current_text], new_calls)
+
+        return (excl_letters_left, excl_sol, new_calls)
 
     # Inner function ends
 
-    return choose_text(len(texts) - 1, sum(letter_counts.values()), letter_counts)
+    return choose_text(len(texts) - 1, sum(letter_counts.values()), letter_counts, 0)

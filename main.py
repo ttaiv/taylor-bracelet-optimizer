@@ -5,7 +5,7 @@ from bracelet_texts import taylor_texts
 from find_bracelet_texts import find_best_texts
 
 LETTER_COUNTS_DIR: str = "data"
-LETTER_COUNTS_FILENAME: str = "letter_counts_test_small2.xlsx"
+LETTER_COUNTS_FILENAME: str = "letter_counts_test_medium.xlsx"
 
 # Make texts upper case and remove spaces
 texts: list[str] = [text.upper().replace(" ", "") for text in taylor_texts]
@@ -16,7 +16,7 @@ letter_counts_df: pd.DataFrame = pd.read_excel(path, header=None)
 letter_counts_dict: dict[str, int] = dict(zip(letter_counts_df[0], letter_counts_df[1]))
 total_letter_count: int = sum(letter_counts_dict.values())
 
-print(f"Number of possible bracelet texts: {len(texts)}")
+print(f"Number of different bracelet texts: {len(texts)}")
 print("Starting letters")
 for letter, count in letter_counts_dict.items():
     print(f"{letter}: {count}")
@@ -24,10 +24,14 @@ print()
 print(f"Starting the algorithm with a pool of {total_letter_count} letters.")
 print()
 
-lowest_letter_count, solution_texts = find_best_texts(letter_counts_dict, texts)
+lowest_letter_count, solution_texts, recursive_calls_count = find_best_texts(
+    letter_counts_dict, texts
+)
 
 print(
     f"You can decrease the letter count to {lowest_letter_count} by choosing the following texts:"
 )
 for chosen_text in solution_texts:
     print(chosen_text)
+print()
+print(f"The algorithm made {recursive_calls_count} recursive calls.")
