@@ -2,6 +2,8 @@
 Contains helper functions and main the recursive function for searching the best texts. 
 """
 
+from collections import Counter
+
 
 def can_form_string(input_string: str, letter_counts: dict[str, int]):
     """
@@ -17,12 +19,7 @@ def can_form_string(input_string: str, letter_counts: dict[str, int]):
             False otherwise.
     """
     # Calculate letter counts in input string.
-    input_letter_counts: dict[str, int] = {}
-    for letter in input_string:
-        if letter in input_letter_counts:
-            input_letter_counts[letter] += 1
-        else:
-            input_letter_counts[letter] = 1
+    input_letter_counts: dict[str, int] = Counter(input_string)
     # Check if we have enough letters.
     for letter, count in input_letter_counts.items():
         if letter not in letter_counts or count > letter_counts[letter]:
