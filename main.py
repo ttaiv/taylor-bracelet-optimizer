@@ -47,5 +47,14 @@ for chosen_text in solution_texts:
     print(chosen_text)
 print()
 
+used_letters = {letter: 0 for letter in letter_counts_dict}
+for text in solution_texts:
+    for letter in text:
+        used_letters[letter] += 1
+
+print("Leftover letters")
+for letter, count in letter_counts_dict.items():
+    print(f"{letter}: {count - used_letters[letter]}")
+
 if SOLUTION_METHOD == "recursive":
     print(f"The algorithm made {recursive_calls} recursive calls.")
