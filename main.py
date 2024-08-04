@@ -2,7 +2,7 @@
 
 import pandas as pd
 from bracelet_texts import taylor_texts
-from find_bracelet_texts import find_best_texts
+from find_bracelet_texts_recursive import find_best_texts_recursive
 from find_bracelet_texts_ilp import find_best_texts_ilp
 
 LETTER_COUNTS_DIR: str = "data"
@@ -36,7 +36,7 @@ print()
 lowest_possible_letter_count, solution_texts, recursive_calls = (
     (*find_best_texts_ilp(letter_counts_dict, texts), 0)  # produces prints
     if SOLUTION_METHOD == "ILP"
-    else find_best_texts(letter_counts_dict, texts)
+    else find_best_texts_recursive(letter_counts_dict, texts)
 )
 
 print(

@@ -6,7 +6,7 @@ import string
 import pandas as pd
 from matplotlib import pyplot as plt
 from bracelet_texts import taylor_texts
-from find_bracelet_texts import can_form_string
+from find_bracelet_texts_recursive import can_form_string
 
 LETTER_COUNTS_FILENAME = "letter_counts_real.xlsx"
 

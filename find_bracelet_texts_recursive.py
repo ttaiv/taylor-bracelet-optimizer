@@ -53,7 +53,7 @@ def update_remaining_letters(chosen_string: str, letter_counts: dict[str, int]):
     return updated_letter_counts
 
 
-def find_best_texts(
+def find_best_texts_recursive(
     letter_counts: dict[str, int], texts: list[str]
 ) -> tuple[int, list[str], int]:
     """
