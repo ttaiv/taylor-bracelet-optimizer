@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 from bracelet_texts import taylor_texts
 from find_bracelet_texts_recursive import can_form_string
 
-LETTER_COUNTS_FILENAME = "letter_counts_real.xlsx"
+LETTER_COUNTS_FILENAME = "data/letter_counts_real.xlsx"
 
 # Read letter counts from xlsx file.
 letter_counts_df = pd.read_excel(LETTER_COUNTS_FILENAME, header=None)
