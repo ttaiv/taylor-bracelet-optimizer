@@ -19,7 +19,7 @@ texts = [text.upper().replace(" ", "") for text in taylor_texts]
 
 # Plot bar chart of available letter counts.
 plt.figure(1)
-plt.bar(letter_counts_dict.keys(), letter_counts_dict.values())
+plt.bar(list(letter_counts_dict.keys()), list(letter_counts_dict.values()))
 plt.xlabel("Letter")
 plt.ylabel("Count")
 plt.title("Available letters")
@@ -54,7 +54,7 @@ for text in possible_texts:
 
 # Plot to letter counts in possible texts.
 plt.figure(2)
-plt.bar(letter_counts_in_texts.keys(), letter_counts_in_texts.values())
+plt.bar(list(letter_counts_in_texts.keys()), list(letter_counts_in_texts.values()))
 plt.xlabel("Letter")
 plt.ylabel("Count")
 plt.title("Letters in possible texts")
@@ -81,7 +81,7 @@ for letter in string.ascii_uppercase:
 
 # Plot the difference between the available letters and the letters in the possible texts.
 plt.figure(3)
-plt.bar(letter_difference.keys(), letter_difference.values())
+plt.bar(list(letter_difference.keys()), list(letter_difference.values()))
 plt.xlabel("Letter")
 plt.ylabel("available - in texts")
 plt.title("Normalized diff between available letters and letters in possible texts")
