@@ -29,7 +29,7 @@ def create_text_letter_counts_matrix(texts: list[str]) -> list[list[int]]:
 
 
 def find_best_texts_ilp(
-    letter_counts: dict[str, int], texts: list[str]
+    letter_counts: dict[str, int], texts: list[str], print_output: bool
 ) -> tuple[int, list[str]]:
     """
     Finds the best texts to form with the given letter counts
@@ -42,10 +42,15 @@ def find_best_texts_ilp(
             The keys are the letters and the values are the counts.
         texts (list[str]): A list of texts to choose from. The texts must be in upper case
             and contain only A-Z characters.
+        print_output (bool): Whether to print the output of the ILP solver.
 
     Returns:
         tuple[int, list[str], int]: A tuple of the lowest letter count possible and the
         list of texts chosen.
+
+    Raises:
+        ValueError: If the texts contain characters other than A-Z or if no
+        optimal solution is found.
     """
 
     for text in texts:
@@ -84,8 +89,14 @@ def find_best_texts_ilp(
             <= count
         )
 
-    # Solve the ILP problem. Produces prints.
-    prob.solve()
+    # Solve the ILP problem.
+    if print_output:
+        prob.solve()
+    else:
+        prob.solve(pulp.PULP_CBC_CMD(msg=False))
+
+    if pulp.LpStatus[prob.status] != "Optimal":
+        raise ValueError("No optimal solution found.")
 
     # Extract return values.
     chosen_texts = [text for text in texts if pulp.value(decision_vars[text]) == 1]

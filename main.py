@@ -34,7 +34,7 @@ print(f"Starting the algorithm with a pool of {total_letter_count} letters.")
 print()
 
 lowest_possible_letter_count, solution_texts, recursive_calls = (
-    (*find_best_texts_ilp(letter_counts_dict, texts), 0)  # produces prints
+    (*find_best_texts_ilp(letter_counts_dict, texts, print_output=False), 0)
     if SOLUTION_METHOD == "ILP"
     else find_best_texts_recursive(letter_counts_dict, texts)
 )
