@@ -7,6 +7,7 @@ from find_bracelet_texts_ilp import find_best_texts_ilp
 
 LETTER_COUNTS_DIR: str = "data"
 LETTER_COUNTS_FILENAME: str = "letter_counts_real.xlsx"
+
 SOLUTION_METHOD: str = "ILP"  # "ILP" or "recursive"
 
 # Make texts upper case and remove spaces
