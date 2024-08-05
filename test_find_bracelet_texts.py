@@ -13,10 +13,18 @@ from find_bracelet_texts_recursive import find_best_texts_recursive
 from find_bracelet_texts_ilp import find_best_texts_ilp
 
 # Solutions for manually engineered test letter counts.
-# TODO: Add these
-test_data_small_sol = ["ADD", "HERE"]
-test_data_small2_sol = ["ADD", "HERE"]
-test_data_medium_sol = ["ADD", "HERE"]
+# (Thanks Milja!)
+test_data_small_sol = ["ANTIHERO", "ALLTOOWELL", "BABE"]
+test_data_small2_sol = ["THEARCHER", "THEBOLTER", "THEGREATWAR"]
+test_data_medium_sol = [
+    "ANTIHERO",
+    "DEARJOHN",
+    "FORTNIGHT",
+    "GLITCH",
+    "IKNOWPLACES",
+    "LONDONBOY",
+    "THEMAN",
+]
 
 # Load the test letter counts from excel and preprocess the texts.
 
