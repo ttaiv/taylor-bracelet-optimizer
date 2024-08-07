@@ -8,13 +8,15 @@ This is a program that, given letters and their counts and a list of strings, fi
 
 The problem of finding the best bracelet texts is a variation of classic [Knapsack problem](https://en.wikipedia.org/wiki/Knapsack_problem), which is known to be NP-hard. To be exact, the problem is [0/1 multidimensional knapsack problem](https://www.scirp.org/journal/paperinformation?paperid=87646)
 
-<!-- Mathematical formulation here -->
+It can be formulated as following:
+
+![Bracelet problem mathematical formulation](data/bracelet_problem.jpg)
 
 ## The dynamic programming solution
 
 The original solution idea was to use [dynamic programming](https://en.wikipedia.org/wiki/Dynamic_programming) with memoization, but the running time of this approach exploded, when the amount of available letters increased. I suspect the reason for this to be the lack of overlap between the subproblems: only a few combinations of texts lead to precisely the same letter usage. Adding the memoization to the recursive function actually just increased the running time (probably because of the overhead of storing the letter states). On my machine the running time of the plain recursive solution with the test data set of 61 letters and 305 bracelet text options is about 1 minute and 15 seconds without and 2 minutes with memoization. With the real letter counts (total of 283 letters) the program did not finish execution in 5 hours.
 
-## Integer linear programming solution
+## The integer linear programming solution
 
 The better solution method leverages [integer linear programming](https://en.wikipedia.org/wiki/Integer_programming) with the help of python library [PuLP](https://pypi.org/project/PuLP/) that calls [CBC solver](https://github.com/coin-or/Cbc). The running time with real letter counts was just a few seconds.
 
