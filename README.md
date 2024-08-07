@@ -14,7 +14,7 @@ It can be formulated as follows:
 
 ## The dynamic programming solution
 
-The initial solution used [dynamic programming](https://en.wikipedia.org/wiki/Dynamic_programming) with memoization. However, the running time of this approach exploded as the amount of available letters grew. I suspect the reason for this to be the limited overlap between subproblems – only a few combinations of texts lead to precisely the same letter usage. Adding the memoization to the recursive function actually increased the running time (likely due to the the overhead of storing the letter states). On my machine the running time of the dynamic programming solution with a data set of 61 available letters and 305 bracelet text options is about 1 minute and 15 seconds without and 2 minutes with memoization. With the real letter counts (total of 283 letters) the program did not finish execution in 5 hours.
+The initial solution used [dynamic programming](https://en.wikipedia.org/wiki/Dynamic_programming) with memoization. However, the running time of this approach exploded as the amount of available letters grew. I suspect the reason for this to be the limited overlap between subproblems – only a few combinations of texts lead to precisely the same letter usage. Adding the memoization to the recursive function actually increased the running time (likely due to the the overhead of storing the letter states). On my machine the running time of the dynamic programming solution with a data set of 61 available letters and 305 bracelet text options is about 1 minute and 15 seconds without and 2 minutes with memoization. With the real letter counts (total of 283 letters) the program did not finish execution in 5 hours. The solution with memoization is in the branch `memorization`.
 
 ## The integer linear programming solution
 
@@ -24,7 +24,7 @@ This more efficient method leverages [integer linear programming](https://en.wik
 
 - `bracelet_texts.py`: Contains a python list of all different bracelet_texts. If you use the program, feel free to modify it to your liking.
 - `find_bracelet_texts_ilp.py`: Implements a function that finds the best texts using integer linear programming.
-- `find_bracelet_texts_recursive.py`: Implements the dynamic programming solution.
+- `find_bracelet_texts_recursive.py`: Implements the dynamic programming solution. Main branch contains the plain recursive version and the branch `memorization` the one with memoization.
 - `main.py`: Contains the main program that loads the Excel file with letter counts, preprocesses the texts, calls the chosen solver function and prints the results.
 - `plot.py`: Contains a script that plots the counts of the available letters and compares them to the letter counts of the texts.
 - `test_find_bracelet_texts.py`: Contains a few manually engineered test cases for the solver functions.
