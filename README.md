@@ -10,7 +10,7 @@ Finding the best bracelet texts is a variation of classic [Knapsack problem](htt
 
 It can be formulated as follows:
 
-![Bracelet problem mathematical formulation](data/bracelet_problem.jpg)
+![Bracelet problem mathematical formulation](bracelet_problem.jpg)
 
 ## The dynamic programming solution
 
